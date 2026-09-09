@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FFX Market</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root{
+ --bg:#030307;
+ --card:#0d0d15;
+ --red:#ff174f;
+ --purple:#792cff;
+ --cyan:#00d9ff;
+ --white:#fff;
+ --gray:#9292a2;
+ --border:rgba(255,255,255,.1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+ background:var(--bg);
+ color:white;
+ font-family:Poppins,sans-serif;
+ overflow-x:hidden;
+}
+
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ z-index:-10;
+ background:
+ radial-gradient(circle at 15% 20%,rgba(255,23,79,.15),transparent 28%),
+ radial-gradient(circle at 85% 30%,rgba(121,44,255,.15),transparent 30%),
+ radial-gradient(circle at 50% 90%,rgba(0,217,255,.06),transparent 25%);
+}
+
+#loading{
+ position:fixed;
+ inset:0;
+ background:#020205;
+ z-index:99999;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
+ transition:.6s;
+}
+
+.loading-logo{
+ font:900 75px Orbitron;
+ color:var(--red);
+ text-shadow:0 0 30px var(--red),0 0 80px var(--red);
+ animation:pulse 1s infinite alternate;
+}
+
+.loading-line{
+ width:250px;
+ height:3px;
+ background:#222;
+ overflow:hidden;
+ margin-top:25px;
+}
+
+.loading-line div{
+ height:100%;
+ width:50%;
+ background:linear-gradient(90deg,var(--red),var(--purple));
+ animation:load 1.2s infinite;
+}
+
+#particles{position:fixed;inset:0;pointer-events:none;z-index:-2}
+
+.particle{
+ position:absolute;
+ width:2px;
+ height:2px;
+ background:var(--red);
+ border-radius:50%;
+ animation:particle 12s linear infinite;
+}
+
+.navbar{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:78px;
+ padding:0 7%;
+ z-index:1000;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ background:rgba(3,3,7,.72);
+ backdrop-filter:blur(20px);
+ border-bottom:1px solid var(--border);
+}
+
+.logo{
+ font:900 27px Orbitron;
+ color:var(--red);
+ text-shadow:0 0 20px rgba(255,23,79,.7);
+}
+
+.logo small{
+ display:block;
+ color:#aaa;
+ font:500 7px Poppins;
+ letter-spacing:5px;
+ text-align:center;
+}
+
+.navbar nav{
+ display:flex;
+ gap:35px;
+}
+
+.navbar nav a{
+ color:#aaa;
+ text-decoration:none;
+ font-size:13px;
+ transition:.3s;
+}
+
+.navbar nav a:hover{color:white}
+
+.login{
+ padding:11px 19px;
+ border:1px solid var(--border);
+ background:#ffffff08;
+ color:white;
+ border-radius:9px;
+ cursor:pointer;
+}
+
+.menu{
+ display:none;
+ background:none;
+ border:0;
+ color:white;
+ font-size:22px;
+}
+
+/* HERO */
+
+.hero{
+ min-height:100vh;
+ padding:130px 8% 70px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ align-items:center;
+ gap:50px;
+}
+
+.badge{
+ display:inline-flex;
+ align-items:center;
+ gap:9px;
+ border:1px solid var(--border);
+ background:#ffffff06;
+ padding:9px 15px;
+ border-radius:30px;
+ font-size:10px;
+ letter-spacing:2px;
+ color:#aaa;
+}
+
+.badge span{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:#00ff9d;
+ box-shadow:0 0 15px #00ff9d;
+}
+
+.hero h1{
+ font:900 clamp(48px,7vw,95px) Orbitron;
+ line-height:.95;
+ letter-spacing:-5px;
+ margin:25px 0;
+}
+
+.hero h1 span{
+ color:transparent;
+ -webkit-text-stroke:1px var(--red);
+ text-shadow:0 0 30px #ff174f55;
+}
+
+.hero p{
+ max-width:560px;
+ color:var(--gray);
+ line-height:1.8;
+ font-size:14px;
+}
+
+.buttons{
+ display:flex;
+ gap:14px;
+ margin-top:32px;
+}
+
+.btn{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ text-decoration:none;
+ border:0;
+ border-radius:9px;
+ padding:14px 23px;
+ cursor:pointer;
+ font-weight:600;
+ transition:.3s;
+}
+
+.btn-primary{
+ color:white;
+ background:linear-gradient(135deg,var(--red),var(--purple));
+ box-shadow:0 12px 40px #ff174f30;
+}
+
+.btn-primary:hover{
+ transform:translateY(-4px);
+ box-shadow:0 18px 50px #ff174f55;
+}
+
+.btn-secondary{
+ color:white;
+ border:1px solid var(--border);
+ background:#ffffff08;
+}
+
+.stats{
+ display:flex;
+ gap:45px;
+ margin-top:45px;
+}
+
+.stat strong{
+ display:block;
+ font:700 20px Orbitron;
+}
+
+.stat span{
+ color:#666;
+ font-size:10px;
+}
+
+/* 3D CARD */
+
+.visual{
+ height:570px;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ perspective:1200px;
+}
+
+.ring{
+ position:absolute;
+ border:1px solid #ff174f35;
+ border-radius:50%;
+ animation:spin 15s linear infinite;
+}
+
+.ring1{width:500px;height:500px}
+.ring2{
+ width:380px;
+ height:380px;
+ border-color:#792cff40;
+ animation-direction:reverse;
+ animation-duration:11s;
+}
+
+.card3d{
+ width:290px;
+ height:420px;
+ position:relative;
+ border-radius:25px;
+ overflow:hidden;
+ background:linear-gradient(145deg,#38112b,#0b0a13 55%,#200c39);
+ border:1px solid #ffffff25;
+ box-shadow:0 50px 100px #000,0 0 70px #ff174f30;
+ transform:rotateY(-17deg) rotateX(7deg);
+ animation:float 5s ease-in-out infinite;
+}
+
+.card3d:before{
+ content:"";
+ position:absolute;
+ width:220px;
+ height:220px;
+ border-radius:50%;
+ background:var(--red);
+ filter:blur(90px);
+ opacity:.35;
+}
+
+.cardtop{
+ position:relative;
+ z-index:2;
+ display:flex;
+ justify-content:space-between;
+ padding:22px;
+ font:600 9px Orbitron;
+ letter-spacing:2px;
+}
+
+.cardtop i{color:var(--red)}
+
+.character{
+ height:280px;
+ position:relative;
+}
+
+.head{
+ position:absolute;
+ top:20px;
+ left:calc(50% - 40px);
+ width:80px;
+ height:80px;
+ border-radius:45%;
+ background:radial-gradient(circle at 30% 30%,#ffbe8e,#4b2139);
+ box-shadow:0 0 30px #ff174f30;
+}
+
+.body{
+ position:absolute;
+ top:95px;
+ left:calc(50% - 55px);
+ width:110px;
+ height:140px;
+ border-radius:25px 25px 15px 15px;
+ background:linear-gradient(135deg,#111,#94133f);
+}
+
+.leg{
+ position:absolute;
+ top:220px;
+ width:35px;
+ height:90px;
+ background:#08080d;
+ border-radius:10px;
+}
+
+.leg1{
+ left:calc(50% - 55px);
+ transform:rotate(5deg);
+}
+
+.leg2{
+ right:calc(50% - 55px);
+ transform:rotate(-5deg);
+}
+
+.cardbottom{
+ position:absolute;
+ bottom:0;
+ width:100%;
+ padding:25px;
+ background:linear-gradient(transparent,#000);
+}
+
+.cardbottom small{
+ color:#888;
+ font-size:8px;
+ letter-spacing:3px;
+}
+
+.cardbottom h3{
+ font:800 25px Orbitron;
+ margin:6px 0;
+}
+
+.stars{color:#ffc400;letter-spacing:4px}
+
+.orb{
+ position:absolute;
+ border-radius:50%;
+}
+
+.orb1{
+ width:22px;
+ height:22px;
+ right:10%;
+ top:10%;
+ background:var(--red);
+ box-shadow:0 0 40px var(--red);
+}
+
+.orb2{
+ width:13px;
+ height:13px;
+ left:10%;
+ bottom:12%;
+ background:var(--cyan);
+ box-shadow:0 0 30px var(--cyan);
+}
+
+/* SECTIONS */
+
+section{
+ padding:110px 8%;
+}
+
+.heading{
+ display:flex;
+ justify-content:space-between;
+ align-items:end;
+ margin-bottom:40px;
+}
+
+.heading.center{
+ justify-content:center;
+ text-align:center;
+}
+
+.small{
+ color:var(--red);
+ font-size:10px;
+ letter-spacing:4px;
+}
+
+h2{
+ font:800 clamp(30px,5vw,50px) Orbitron;
+ margin-top:8px;
+}
+
+h2 span{color:var(--red)}
+
+.search{
+ display:flex;
+ gap:12px;
+ margin-bottom:30px;
+}
+
+.searchbox{
+ flex:1;
+ display:flex;
+ align-items:center;
+ gap:12px;
+ border:1px solid var(--border);
+ background:#ffffff05;
+ border-radius:9px;
+ padding:0 17px;
+}
+
+.searchbox i{color:#666}
+
+.searchbox input{
+ width:100%;
+ padding:15px 0;
+ border:0;
+ outline:0;
+ background:none;
+ color:white;
+}
+
+select,input{
+ background:#101019;
+ color:white;
+ border:1px solid var(--border);
+ border-radius:8px;
+ padding:14px;
+ outline:none;
+}
+
+.account-grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:20px;
+}
+
+.account{
+ background:#ffffff06;
+ border:1px solid var(--border);
+ border-radius:16px;
+ overflow:hidden;
+ transition:.35s;
+}
+
+.account:hover{
+ transform:translateY(-8px);
+ border-color:#ff174f70;
+ box-shadow:0 25px 70px #ff174f18;
+}
+
+.account-image{
+ height:210px;
+ position:relative;
+ overflow:hidden;
+ background:linear-gradient(135deg,#301127,#0d0d17);
+}
+
+.account-image img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.fake-character{
+ position:absolute;
+ inset:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font:900 50px Orbitron;
+ color:var(--red);
+ text-shadow:0 0 40px var(--red);
+}
+
+.level,.category{
+ position:absolute;
+ top:12px;
+ padding:6px 9px;
+ border-radius:6px;
+ background:#000b;
+ font-size:9px;
+}
+
+.level{left:12px}
+.category{
+ right:12px;
+ background:var(--red);
+}
+
+.account-body{padding:18px}
+
+.account-body h3{
+ font-size:14px;
+ margin-bottom:10px;
+}
+
+.meta{
+ display:flex;
+ justify-content:space-between;
+ color:#666;
+ font-size:9px;
+}
+
+.price{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin-top:18px;
+}
+
+.price strong{font:700 16px Orbitron}
+
+.view{
+ background:#ff174f18;
+ color:var(--red);
+ border:1px solid #ff174f30;
+ padding:8px 12px;
+ border-radius:7px;
+ cursor:pointer;
+}
+
+/* SELL */
+
+.sell-section{
+ background:linear-gradient(90deg,#ff174f08,transparent,#792cff08);
+}
+
+.sell{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:70px;
+ align-items:center;
+}
+
+.sell-info p{
+ color:#888;
+ line-height:1.8;
+ margin:20px 0 35px;
+}
+
+.feature{
+ display:flex;
+ gap:15px;
+ margin:22px 0;
+}
+
+.feature i{
+ width:43px;
+ height:43px;
+ display:grid;
+ place-items:center;
+ color:var(--red);
+ background:#ff174f12;
+ border-radius:9px;
+}
+
+.feature h4{font-size:14px}
+.feature p{
+ margin:3px 0 0;
+ color:#666;
+ font-size:11px;
+}
+
+.form-card{
+ padding:32px;
+ background:#ffffff06;
+ border:1px solid var(--border);
+ border-radius:18px;
+ backdrop-filter:blur(15px);
+}
+
+.form-card h3{
+ font:700 20px Orbitron;
+ margin-bottom:20px;
+}
+
+form{
+ display:flex;
+ flex-direction:column;
+ gap:9px;
+}
+
+label{
+ color:#888;
+ font-size:10px;
+ margin-top:7px;
+}
+
+.row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+
+.row div{
+ display:flex;
+ flex-direction:column;
+}
+
+.upload{
+ border:1px dashed #444;
+ padding:23px;
+ text-align:center;
+ border-radius:9px;
+}
+
+.upload i{
+ color:var(--red);
+ font-size:28px;
+}
+
+.upload p{
+ color:#666;
+ font-size:10px;
+ margin:7px;
+}
+
+.preview img{
+ max-width:100%;
+ max-height:180px;
+ border-radius:9px;
+ margin-top:8px;
+}
+
+.warning{
+ display:flex;
+ gap:10px;
+ padding:11px;
+ color:#c7a85c;
+ background:#ffaa0010;
+ border:1px solid #ffaa0020;
+ font-size:9px;
+ margin:12px 0;
+}
+
+/* STEPS */
+
+.steps{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:20px;
+}
+
+.step{
+ text-align:center;
+ padding:35px 25px;
+ border:1px solid var(--border);
+ border-radius:15px;
+ background:#ffffff04;
+}
+
+.stepnum{
+ font:700 35px Orbitron;
+ color:#ff174f40;
+}
+
+.step i{
+ display:block;
+ color:var(--red);
+ font-size:28px;
+ margin:15px 0;
+}
+
+.step h3{font-size:14px}
+.step p{
+ color:#666;
+ font-size:10px;
+ line-height:1.7;
+ margin-top:8px;
+}
+
+/* FOOTER */
+
+footer{
+ text-align:center;
+ border-top:1px solid var(--border);
+ padding:55px 8% 25px;
+}
+
+.footerlogo{
+ font:900 25px Orbitron;
+ color:var(--red);
+}
+
+footer p{
+ color:#666;
+ font-size:11px;
+ margin:10px;
+}
+
+.links{
+ display:flex;
+ justify-content:center;
+ gap:25px;
+ margin:22px;
+}
+
+.links a{
+ color:#777;
+ text-decoration:none;
+ font-size:10px;
+}
+
+.copy{
+ color:#444;
+ font-size:9px;
+}
+
+/* MODAL */
+
+.modal{
+ position:fixed;
+ inset:0;
+ background:#000c;
+ backdrop-filter:blur(10px);
+ z-index:5000;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+}
+
+.modal.active{display:flex}
+
+.modalbox{
+ width:100%;
+ max-width:430px;
+ padding:32px;
+ background:#101017;
+ border:1px solid var(--border);
+ border-radius:17px;
+ position:relative;
+}
+
+.close{
+ position:absolute;
+ top:12px;
+ right:18px;
+ background:none;
+ border:0;
+ color:white;
+ font-size:28px;
+ cursor:pointer;
+}
+
+.modalbox h2{
+ font-size:25px;
+ margin-bottom:8px;
+}
+
+.modalbox p{
+ color:#777;
+ font-size:11px;
+ margin-bottom:22px;
+}
+
+.google{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:8px;
+ background:white;
+ color:#111;
+ font-weight:600;
+ cursor:pointer;
+}
+
+.modalbox small{
+ display:block;
+ color:#555;
+ font-size:9px;
+ margin-top:18px;
+}
+
+/* ANIMATION */
+
+@keyframes pulse{
+ from{opacity:.5}
+ to{opacity:1}
+}
+
+@keyframes load{
+ from{transform:translateX(-100%)}
+ to{transform:translateX(250%)}
+}
+
+@keyframes float{
+ 0%,100%{transform:rotateY(-17deg) rotateX(7deg) translateY(0)}
+ 50%{transform:rotateY(-8deg) rotateX(3deg) translateY(-22px)}
+}
+
+@keyframes spin{
+ from{transform:rotate(0)}
+ to{transform:rotate(360deg)}
+}
+
+@keyframes particle{
+ from{transform:translateY(100vh);opacity:0}
+ 15%{opacity:.6}
+ to{transform:translateY(-100vh);opacity:0}
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+
+ .account-grid{grid-template-columns:repeat(2,1fr)}
+ .hero{grid-template-columns:1fr}
+ .sell{grid-template-columns:1fr}
+ .steps{grid-template-columns:repeat(2,1fr)}
+
+}
+
+@media(max-width:700px){
+
+ .navbar{padding:0 5%}
+
+ .navbar nav{
+  display:none;
+  position:absolute;
+  top:78px;
+  left:0;
+  width:100%;
+  padding:25px;
+  background:#08080e;
+  flex-direction:column;
+ }
+
+ .navbar nav.show{display:flex}
+
+ .menu{display:block}
+
+ .login{display:none}
+
+ .hero{
+  padding:120px 5% 50px;
+ }
+
+ .hero h1{
+  font-size:50px;
+  letter-spacing:-3px;
+ }
+
+ .visual{height:430px}
+
+ .card3d{
+  width:245px;
+  height:355px;
+ }
+
+ .ring1{
+  width:350px;
+  height:350px;
+ }
+
+ .ring2{
+  width:270px;
+  height:270px;
+ }
+
+ section{padding:80px 5%}
+
+ .heading{
+  align-items:flex-start;
+  flex-direction:column;
+  gap:15px;
+ }
+
+ .search{flex-direction:column}
+
+ .account-grid{grid-template-columns:1fr}
+
+ .steps{grid-template-columns:1fr}
+
+ .row{grid-template-columns:1fr}
+
+ .stats{gap:20px}
+
+ .buttons{flex-direction:column}
+
+ .btn{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOADING -->
+
+<div id="loading">
+ <div class="loading-logo">FFX</div>
+ <div class="loading-line"><div></div></div>
+</div>
+
+<div id="particles"></div>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+ <div class="logo">
+  FFX
+  <small>MARKET</small>
+ </div>
+
+ <nav id="nav">
+  <a href="#home">Home</a>
+  <a href="#market">Market</a>
+  <a href="#sell">Sell</a>
+  <a href="#how">How It Works</a>
+ </nav>
+
+ <div>
+  <button class="login" onclick="openLogin()">
+   <i class="fa-solid fa-user"></i> Login
+  </button>
+
+  <button class="menu" onclick="toggleMenu()">
+   <i class="fa-solid fa-bars"></i>
+  </button>
+ </div>
+
+</header>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+ <div>
+
+  <div class="badge">
+   <span></span>
+   NEXT GENERATION GAMING MARKET
+  </div>
+
+  <h1>
+   BUY.<br>
+   <span>SELL.</span><br>
+   DOMINATE.
+  </h1>
+
+  <p>
+   Discover premium gaming collections, rare items and
+   legendary accounts in a futuristic marketplace.
+  </p>
+
+  <div class="buttons">
+   <a href="#market" class="btn btn-primary">
+    <i class="fa-solid fa-cart-shopping"></i>
+    Explore Market
+   </a>
+
+   <a href="#sell" class="btn btn-secondary">
+    Sell Your Listing
+   </a>
+  </div>
+
+  <div class="stats">
+   <div class="stat">
+    <strong id="count">6+</strong>
+    <span>LISTINGS</span>
+   </div>
+
+   <div class="stat">
+    <strong>8K+</strong>
+    <span>USERS</span>
+   </div>
+
+   <div class="stat">
+    <strong>99%</strong>
+    <span>RATING</span>
+   </div>
+  </div>
+
+ </div>
+
+ <div class="visual">
+
+  <div class="ring ring1"></div>
+  <div class="ring ring2"></div>
+
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="card3d">
+
+   <div class="cardtop">
+    <span>LEGENDARY</span>
+    <i class="fa-solid fa-fire"></i>
+   </div>
+
+   <div class="character">
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="leg leg1"></div>
+    <div class="leg leg2"></div>
+   </div>
+
+   <div class="cardbottom">
+    <small>FFX COLLECTION</small>
+    <h3>PHANTOM</h3>
+    <div class="stars">★★★★★</div>
+   </div>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- MARKET -->
+
+<section id="market">
+
+ <div class="heading">
+
+  <div>
+   <div class="small">EXPLORE</div>
+   <h2>Featured <span>Listings</span></h2>
+  </div>
+
+ </div>
+
+ <div class="search">
+
+  <div class="searchbox">
+   <i class="fa-solid fa-magnifying-glass"></i>
+
+   <input
+    id="search"
+    type="text"
+    placeholder="Search listing..."
+    oninput="searchListings()"
+   >
+  </div>
+
+  <select id="sort" onchange="sortListings()">
+   <option value="new">Newest</option>
+   <option value="low">Price Low</option>
+   <option value="high">Price High</option>
+  </select>
+
+  <select id="filter" onchange="filterListings()">
+   <option value="all">All Categories</option>
+   <option value="Legendary">Legendary</option>
+   <option value="Rare">Rare</option>
+   <option value="Collector">Collector</option>
+   <option value="Premium">Premium</option>
+  </select>
+
+ </div>
+
+ <div class="account-grid" id="grid"></div>
+
+</section>
+
+<!-- SELL -->
+
+<section class="sell-section" id="sell">
+
+ <div class="sell">
+
+  <div class="sell-info">
+
+   <div class="small">START SELLING</div>
+
+   <h2>
+    Turn Your <span>Collection</span>
+    Into Value.
+   </h2>
+
+   <p>
+    Create a listing with your item information and
+    screenshots. This demo stores listings locally in
+    your browser.
+   </p>
+
+   <div class="feature">
+    <i class="fa-solid fa-bolt"></i>
+
+    <div>
+     <h4>Fast Listing</h4>
+     <p>Create a listing in minutes.</p>
+    </div>
+   </div>
+
+   <div class="feature">
+    <i class="fa-solid fa-shield-halved"></i>
+
+    <div>
+     <h4>Safer Marketplace</h4>
+     <p>Never share passwords or OTPs.</p>
+    </div>
+   </div>
+
+   <div class="feature">
+    <i class="fa-solid fa-cloud"></i>
+
+    <div>
+     <h4>Cloud Ready</h4>
+     <p>Can later be connected to Google Drive.</p>
+    </div>
+   </div>
+
+  </div>
+
+  <div class="form-card">
+
+   <h3>Create Listing</h3>
+
+   <form id="form">
+
+    <label>Listing Title</label>
+
+    <input
+     id="title"
+     required
+     placeholder="Example: Legendary Collection"
+    >
+
+    <div class="row">
+
+     <div>
+      <label>Level</label>
+      <input
+       id="level"
+       type="number"
+       min="1"
+       max="100"
+       required
+       placeholder="70"
+      >
+     </div>
+
+     <div>
+      <label>Price ₹</label>
+      <input
+       id="price"
+       type="number"
+       min="1"
+       required
+       placeholder="2500"
+      >
+     </div>
+
+    </div>
+
+    <label>Category</label>
+
+    <select id="category">
+     <option>Legendary</option>
+     <option>Rare</option>
+     <option>Collector</option>
+     <option>Premium</option>
+    </select>
+
+    <label>Screenshot</label>
+
+    <div class="upload">
+
+     <i class="fa-solid fa-cloud-arrow-up"></i>
+
+     <p>Select listing image</p>
+
+     <input
+      id="image"
+      type="file"
+      accept="image/*"
+     >
+
+    </div>
+
+    <div class="preview" id="preview"></div>
+
+    <div class="warning">
+     <i class="fa-solid fa-triangle-exclamation"></i>
+
+     <span>
+      Never enter or upload passwords, OTPs,
+      recovery codes or authentication tokens.
+     </span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">
+     <i class="fa-solid fa-plus"></i>
+     Publish Listing
+    </button>
+
+   </form>
+
+  </div>
+
+ </div>
+
+</section>
+
+<!-- HOW -->
+
+<section id="how">
+
+ <div class="heading center">
+
+  <div>
+   <div class="small">SIMPLE PROCESS</div>
+   <h2>How <span>It Works</span></h2>
+  </div>
+
+ </div>
+
+ <div class="steps">
+
+  <div class="step">
+   <div class="stepnum">01</div>
+   <i class="fa-solid fa-user-plus"></i>
+   <h3>Create Profile</h3>
+   <p>Create your marketplace profile.</p>
+  </div>
+
+  <div class="step">
+   <div class="stepnum">02</div>
+   <i class="fa-solid fa-camera"></i>
+   <h3>Create Listing</h3>
+   <p>Add your listing information and images.</p>
+  </div>
+
+  <div class="step">
+   <div class="stepnum">03</div>
+   <i class="fa-solid fa-comments"></i>
+   <h3>Connect</h3>
+   <p>Communicate through the marketplace.</p>
+  </div>
+
+  <div class="step">
+   <div class="stepnum">04</div>
+   <i class="fa-solid fa-star"></i>
+   <h3>Review</h3>
+   <p>Build reputation through reviews.</p>
+  </div>
+
+ </div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+ <div class="footerlogo">FFX MARKET</div>
+
+ <p>Next generation gaming marketplace.</p>
+
+ <div class="links">
+  <a href="#">Privacy</a>
+  <a href="#">Terms</a>
+  <a href="#">Support</a>
+ </div>
+
+ <div class="copy">
+  © 2026 FFX Market
+ </div>
+
+</footer>
+
+<!-- LOGIN MODAL -->
+
+<div class="modal" id="loginModal">
+
+ <div class="modalbox">
+
+  <button class="close" onclick="closeLogin()">×</button>
+
+  <h2>Welcome Back</h2>
+
+  <p>Sign in to your FFX Market account.</p>
+
+  <button class="google" onclick="googleLogin()">
+   <i class="fa-brands fa-google"></i>
+   Continue with Google
+  </button>
+
+  <small>
+   Demo button. Real Google OAuth requires a backend
+   and Google Cloud OAuth configuration.
+  </small>
+
+ </div>
+
+</div>
+
+<script>
+
+/* =========================================
+   DEMO DATA
+========================================= */
+
+let listings = [
+ {
+  id:1,
+  title:"Phantom Legendary Collection",
+  level:72,
+  category:"Legendary",
+  price:4999,
+  image:"",
+  date:6
+ },
+ {
+  id:2,
+  title:"Rare Evo Collection",
+  level:65,
+  category:"Rare",
+  price:2999,
+  image:"",
+  date:5
+ },
+ {
+  id:3,
+  title:"Collector Bundle",
+  level:78,
+  category:"Collector",
+  price:6999,
+  image:"",
+  date:4
+ },
+ {
+  id:4,
+  title:"Premium Ranked Collection",
+  level:59,
+  category:"Premium",
+  price:1999,
+  image:"",
+  date:3
+ },
+ {
+  id:5,
+  title:"Ultimate Legendary",
+  level:81,
+  category:"Legendary",
+  price:8999,
+  image:"",
+  date:2
+ },
+ {
+  id:6,
+  title:"Elite Rare Collection",
+  level:55,
+  category:"Rare",
+  price:1499,
+  image:"",
+  date:1
+ }
+];
+
+let visible=[...listings];
+
+
+/* =========================================
+   START
+========================================= */
+
+window.addEventListener("load",()=>{
+
+ createParticles();
+
+ loadListings();
+
+ render();
+
+ setTimeout(()=>{
+
+  document.getElementById("loading").style.opacity="0";
+
+  setTimeout(()=>{
+   document.getElementById("loading").style.display="none";
+  },600);
+
+ },1200);
+
+});
+
+
+/* =========================================
+   PARTICLES
+========================================= */
+
+function createParticles(){
+
+ const box=document.getElementById("particles");
+
+ for(let i=0;i<80;i++){
+
+  const p=document.createElement("div");
+
+  p.className="particle";
+
+  p.style.left=Math.random()*100+"%";
+
+  p.style.animationDuration=
+   (8+Math.random()*15)+"s";
+
+  p.style.animationDelay=
+   Math.random()*10+"s";
+
+  p.style.opacity=Math.random();
+
+  box.appendChild(p);
+ }
+}
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function render(){
+
+ const grid=document.getElementById("grid");
+
+ grid.innerHTML="";
+
+ document.getElementById("count").textContent=
+  listings.length+"+";
+
+ if(visible.length===0){
+
+  grid.innerHTML=`
+   <div style="
+    grid-column:1/-1;
+    text-align:center;
+    padding:70px;
+    color:#666;
+   ">
+    <i class="fa-solid fa-box-open"
+       style="font-size:45px"></i>
+
+    <h3 style="margin-top:15px">
+     No listings found
+    </h3>
+   </div>
+  `;
+
+  return;
+ }
+
+ visible.forEach(item=>{
+
+  const card=document.createElement("div");
+
+  card.className="account";
+
+  const image=item.image
+   ? `<img src="${item.image}" alt="">`
+   : `<div class="fake-character">FFX</div>`;
+
+  card.innerHTML=`
+
+   <div class="account-image">
+
+    ${image}
+
+    <span class="level">
+     LVL ${item.level}
+    </span>
+
+    <span class="category">
+     ${safe(item.category)}
+    </span>
+
+   </div>
+
+   <div class="account-body">
+
+    <h3>
+     ${safe(item.title)}
+    </h3>
+
+    <div class="meta">
+
+     <span>
+      <i class="fa-solid fa-shield"></i>
+      Verified listing
+     </span>
+
+     <span>
+      ★ 4.9
+     </span>
+
+    </div>
+
+    <div class="price">
+
+     <strong>
+      ₹${Number(item.price).toLocaleString("en-IN")}
+     </strong>
+
+     <button
+      class="view"
+      onclick="viewItem(${item.id})"
+     >
+      View
+     </button>
+
+    </div>
+
+   </div>
+  `;
+
+  grid.appendChild(card);
+
+ });
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+function searchListings(){
+
+ const q=document
+  .getElementById("search")
+  .value
+  .toLowerCase();
+
+ visible=listings.filter(x=>
+  x.title.toLowerCase().includes(q) ||
+  x.category.toLowerCase().includes(q) ||
+  String(x.level).includes(q)
+ );
+
+ applyCategory(false);
+
+}
+
+
+/* =========================================
+   CATEGORY
+========================================= */
+
+function filterListings(){
+
+ visible=[...listings];
+
+ const q=document
+  .getElementById("search")
+  .value
+  .toLowerCase();
+
+ if(q){
+
+  visible=visible.filter(x=>
+   x.title.toLowerCase().includes(q) ||
+   x.category.toLowerCase().includes(q) ||
+   String(x.level).includes(q)
+  );
+
+ }
+
+ applyCategory(false);
+}
+
+
+function applyCategory(doRender=true){
+
+ const cat=document
+  .getElementById("filter")
+  .value;
+
+ if(cat!=="all"){
+
+  visible=visible.filter(
+   x=>x.category===cat
+  );
+
+ }
+
+ if(doRender) render();
+ else sortListings();
+
+}
+
+
+/* =========================================
+   SORT
+========================================= */
+
+function sortListings(){
+
+ const mode=document
+  .getElementById("sort")
+  .value;
+
+ if(mode==="low"){
+
+  visible.sort(
+   (a,b)=>a.price-b.price
+  );
+
+ }else if(mode==="high"){
+
+  visible.sort(
+   (a,b)=>b.price-a.price
+  );
+
+ }else{
+
+  visible.sort(
+   (a,b)=>b.date-a.date
+  );
+
+ }
+
+ render();
+}
+
+
+/* =========================================
+   VIEW
+========================================= */
+
+function viewItem(id){
+
+ const x=listings.find(
+  item=>item.id===id
+ );
+
+ if(!x)return;
+
+ alert(
+  "FFX MARKET\n\n"+
+  x.title+"\n\n"+
+  "Level: "+x.level+"\n"+
+  "Category: "+x.category+"\n"+
+  "Price: ₹"+x.price.toLocaleString("en-IN")+
+  "\n\nDemo listing."
+ );
+
+}
+
+
+/* =========================================
+   IMAGE PREVIEW
+========================================= */
+
+document
+.getElementById("image")
+.addEventListener("change",function(){
+
+ const file=this.files[0];
+
+ if(!file)return;
+
+ const reader=new FileReader();
+
+ reader.onload=e=>{
+
+  document.getElementById("preview").innerHTML=`
+   <img src="${e.target.result}" alt="Preview">
+  `;
+
+ };
+
+ reader.readAsDataURL(file);
+
+});
+
+
+/* =========================================
+   CREATE LISTING
+========================================= */
+
+document
+.getElementById("form")
+.addEventListener("submit",function(e){
+
+ e.preventDefault();
+
+ const title=document
+  .getElementById("title")
+  .value.trim();
+
+ const level=Number(
+  document.getElementById("level").value
+ );
+
+ const price=Number(
+  document.getElementById("price").value
+ );
+
+ const category=document
+  .getElementById("category")
+  .value;
+
+ const file=document
+  .getElementById("image")
+  .files[0];
+
+
+ if(!title || level<1 || level>100 || price<=0){
+
+  alert("Please enter valid listing information.");
+
+  return;
+ }
+
+
+ function create(image){
+
+  const item={
+   id:Date.now(),
+   title:title,
+   level:level,
+   category:category,
+   price:price,
+   image:image || "",
+   date:Date.now()
+  };
+
+  listings.unshift(item);
+
+  saveListings();
+
+  visible=[...listings];
+
+  render();
+
+  document.getElementById("form").reset();
+
+  document.getElementById("preview").innerHTML="";
+
+  alert("Listing published successfully!");
+
+  document
+   .getElementById("market")
+   .scrollIntoView({
+    behavior:"smooth"
+   });
+ }
+
+
+ if(file){
+
+  const reader=new FileReader();
+
+  reader.onload=e=>{
+   create(e.target.result);
+  };
+
+  reader.readAsDataURL(file);
+
+ }else{
+
+  create("");
+
+ }
+
+});
+
+
+/* =========================================
+   LOCAL STORAGE
+========================================= */
+
+function saveListings(){
+
+ try{
+
+  localStorage.setItem(
+   "ffx_market_listings",
+   JSON.stringify(listings)
+  );
+
+ }catch(e){
+
+  console.log("Storage error",e);
+
+ }
+
+}
+
+
+function loadListings(){
+
+ try{
+
+  const data=localStorage.getItem(
+   "ffx_market_listings"
+  );
+
+  if(data){
+
+   const parsed=JSON.parse(data);
+
+   if(Array.isArray(parsed)){
+
+    listings=parsed;
+
+    visible=[...listings];
+
+   }
+
+  }
+
+ }catch(e){
+
+  console.log("Load error",e);
+
+ }
+
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+function openLogin(){
+
+ document
+  .getElementById("loginModal")
+  .classList.add("active");
+
+}
+
+
+function closeLogin(){
+
+ document
+  .getElementById("loginModal")
+  .classList.remove("active");
+
+}
+
+
+function googleLogin(){
+
+ alert(
+  "Google Login Demo\n\n"+
+  "To activate this, connect Google OAuth "+
+  "to your own backend."
+ );
+
+}
+
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+function toggleMenu(){
+
+ document
+  .getElementById("nav")
+  .classList.toggle("show");
+
+}
+
+
+/* =========================================
+   SECURITY
+========================================= */
+
+function safe(value){
+
+ return String(value)
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================
+   CLOSE MODAL
+========================================= */
+
+window.addEventListener("click",e=>{
+
+ const modal=
+  document.getElementById("loginModal");
+
+ if(e.target===modal){
+  closeLogin();
+ }
+
+});
+
+</script>
+
+</body>
+</html>
